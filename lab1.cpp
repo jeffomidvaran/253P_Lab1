@@ -5,20 +5,13 @@
 #include <optional>
 #include <unordered_set>
 #include <algorithm>
+#include <string>
+#include <boost/algorithm/string.hpp>
 
 using namespace std;
 
-struct Person {
-    string firstName = "Empty";
-    string lastName = "Empty";
-
-    Person(string firstName, string lastName) {
-        this->firstName = firstName; 
-        this->lastName = lastName;
-    } 
-};
-
 vector<string> students; 
+vector<string> absentStudents;
 
 string getFileText() {
     ifstream myFile("roster.txt"); 
@@ -28,7 +21,6 @@ string getFileText() {
 }
 
 int getPerson(int startIndex, string fileText, int endIndex) {
-    
     int startIndexLastName = fileText.find("\t", startIndex) + 1;
     if (startIndexLastName > endIndex) { 
         return -1; 
@@ -40,8 +32,15 @@ int getPerson(int startIndex, string fileText, int endIndex) {
     int endIndexFirstName = fileText.find("\t", startIndexFirstName); 
     string firstName = fileText.substr(startIndexFirstName, endIndexFirstName - startIndexFirstName);
 
-    cout << firstName << " " << lastName << endl;
-    students.push_back(firstName + " " + lastName);
+    // take out absent students before they are added in. 
+    string currentStudent = firstName + " " + lastName;
+    cout << currentStudent << endl;
+    for(string absent: absentStudents) {
+        if (absent == currentStudent) {
+            return fileText.find("\n", endIndexLastName);
+        } 
+    }
+    students.push_back(currentStudent);
     return fileText.find("\n", endIndexLastName);
 }
 
@@ -71,29 +70,64 @@ void createGroups(int size, unordered_set<string> absent) {
     }
 }
 
-int main(int argc, char** argv) {
-    string fileText = getFileText();
-    string studentDescriptionHeader = "Student# Name    Email   Major   Lvl Opt Notes";
+
+void getAbsentStudents() {
+    string absentStudent; 
+    do {
+        cout << "Enter the name of an absent Student (Type \"end\" to stop entering absent students): "; 
+        getline(cin, absentStudent); 
+        if(absentStudent != "end") {
+            absentStudent = boost::to_upper_copy(absentStudent);
+            absentStudents.push_back(absentStudent);
+        }
+    }while(absentStudent != "end");
+}
+
+
+void getStudentsFromFileText(string fileText) {
+    string studentDescriptionHeader = "Student#	Name	Email	Major	Lvl	Opt	Notes";
     int startIndex = fileText.find(studentDescriptionHeader) + studentDescriptionHeader.length() + 2;
     int endIndex =  fileText.find("Total: ");
-    cout << startIndex << " " << endIndex << endl;
 
     do {
         startIndex = getPerson(startIndex, fileText, endIndex);
     } while(startIndex != -1);
+}
 
-    for(string s:students){cout<<s<<" hello";}
-    cout<<"group size:";
-    int groupSize,absentNumber;
-    cin>>groupSize;
-    cout<<"absent students:";
-    cin>>absentNumber;
-    unordered_set<string>absent;
-    for(int i=0;i<absentNumber;i++){
-        string tmp;
-        getline(cin,tmp);
-        absent.insert(tmp);
-    }
-    createGroups(groupSize,absent);
+void printVector(std::vector <string> const &a) {
+   std::cout << "The vector elements are : ";
+
+   for(int i=0; i < a.size(); i++)
+   std::cout << a.at(i) << ' ';
+}
+
+
+int main(int argc, char** argv) {    
+    getAbsentStudents();
+    string fileText = getFileText();
+    getStudentsFromFileText(fileText);
+
+
+
+
+
+    // for(string s:students){cout<<s<<" hello";}
+    // cout<<"group size:";
+    // int groupSize,absentNumber;
+    // cin>>groupSize;
+    // cout<<"absent students:";
+    // cin>>absentNumber;
+    // unordered_set<string>absent;
+    // for(int i=0;i<absentNumber;i++){
+    //     string tmp;
+    //     getline(cin,tmp);
+    //     absent.insert(tmp);
+    // }
+    // createGroups(groupSize,absent);
     return 0;
 }
+
+
+
+
+// Ray Klefstad
