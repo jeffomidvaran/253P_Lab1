@@ -104,6 +104,11 @@ void createGroups(int size, unordered_set<string> absent) {
 
 
 int main(int argc, char** argv) {    
+    /*
+        group size comes in from stdin argv[1]
+        absent students is entered by the user via command line
+    */
+   
     getAbsentStudents();
     string fileText = getFileText();
     getStudentsFromFileText(fileText);
