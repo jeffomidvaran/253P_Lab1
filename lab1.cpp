@@ -7,11 +7,13 @@
 #include <algorithm>
 #include <string>
 #include <boost/algorithm/string.hpp>
+#include <unordered_set>
 
 using namespace std;
 
 vector<string> students; 
-vector<string> absentStudents;
+// vector<string> absentStudents;
+unordered_set<string> absentStudents;
 
 string getFileText() {
     ifstream myFile("roster.txt"); 
@@ -34,11 +36,12 @@ int getPerson(int startIndex, string fileText, int endIndex) {
 
     // take out absent students before they are added in. 
     string currentStudent = firstName + " " + lastName;
-    for(string absent: absentStudents) {
-        if (absent == currentStudent) {
-            return fileText.find("\n", endIndexLastName);
-        } 
-    }
+
+    unordered_set<string>::const_iterator found  = absentStudents.find(currentStudent);
+    if (found != absentStudents.end()){
+        return fileText.find("\n", endIndexLastName);
+    } 
+
     students.push_back(currentStudent);
     return fileText.find("\n", endIndexLastName);
 }
@@ -52,7 +55,7 @@ void getAbsentStudents() {
         getline(cin, absentStudent); 
         if(absentStudent != "end") {
             absentStudent = boost::to_upper_copy(absentStudent);
-            absentStudents.push_back(absentStudent);
+            absentStudents.insert(absentStudent);
         }
     }while(absentStudent != "end");
 }
@@ -69,7 +72,6 @@ void getStudentsFromFileText(string fileText) {
 
 void printVector(std::vector <string> const &a) {
    std::cout << "The vector elements are : ";
-
    for(int i=0; i < a.size(); i++){
     std::cout << a.at(i) << ' '; 
    }
