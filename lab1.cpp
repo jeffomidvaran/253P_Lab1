@@ -76,26 +76,21 @@ void printVector(std::vector <string> const &a) {
    cout << endl;
 }
 
-void createGroups(int size, unordered_set<string> absent) {
-    vector<string>attended;
-    for(int i=0;i<students.size();i++){
-        if(absent.find(students[i])==absent.end()){
-            attended.push_back(students[i]);
-        }
-    }
-    random_shuffle(attended.begin(),attended.end());
-    int num=attended.size()/size;
-    int remain=attended.size()-num*size;
+void createGroups(int size) {
+    random_shuffle(students.begin(),students.end());
+    int num=students.size()/size;
+    int remain=students.size()-num*size;
     cout<<"groups:"<<endl;
     int index=0;
     for(int i=1;i<=size;i++){
-        cout<<i<<". ";
+        cout<<i<<". \n";
         for(int j=0;j<num;j++){
-            cout<<attended[index]<<endl;
+            cout<< "\t" << students[index] << endl;
             index++;
         }
         if(remain>0){
-            cout<<attended[index]<<endl;
+            cout<< "\t" << students[index] << endl;
+            // cout<<students[index]<<endl;
             index++;
             remain--;
         }
@@ -108,30 +103,10 @@ int main(int argc, char** argv) {
         group size comes in from stdin argv[1]
         absent students is entered by the user via command line
     */
-   
     getAbsentStudents();
     string fileText = getFileText();
     getStudentsFromFileText(fileText);
-
-    printVector(students);
-    printVector(absentStudents);
-
-
-
-
-    // for(string s:students){cout<<s<<" hello";}
-    // cout<<"group size:";
-    // int groupSize,absentNumber;
-    // cin>>groupSize;
-    // cout<<"absent students:";
-    // cin>>absentNumber;
-    // unordered_set<string>absent;
-    // for(int i=0;i<absentNumber;i++){
-    //     string tmp;
-    //     getline(cin,tmp);
-    //     absent.insert(tmp);
-    // }
-    // createGroups(groupSize,absent);
+    createGroups(stoi(argv[1]));
     return 0;
 }
 
