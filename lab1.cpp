@@ -74,7 +74,7 @@ void createGroups(int size) {
     random_shuffle(students.begin(),students.end());
     int num=students.size()/size;
     int remain=students.size()%size;
-    cout<<"groups:"<<endl;
+    cout<<endl<<"groups:"<<endl;
     int index=0;
     for(int i=1;i<=size;i++){
         cout<<i<<". \n";
