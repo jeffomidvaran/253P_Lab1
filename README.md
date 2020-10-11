@@ -1,7 +1,9 @@
 # 253P_Lab1
 
-### Current Status Quo
+### Build
 
-@Jeff, I think there's a bug in func `getPerson`, could you take a look? 
+```shell
+make
+```
 
-It's working now for me. Try compliling with the Makefile
+If you want to change the goupSize, you can modify it in the Makefile.
