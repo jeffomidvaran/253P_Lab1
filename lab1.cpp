@@ -70,18 +70,10 @@ void getStudentsFromFileText(string fileText) {
     } while(startIndex != -1);
 }
 
-void printVector(std::vector <string> const &a) {
-   std::cout << "The vector elements are : ";
-   for(int i=0; i < a.size(); i++){
-    std::cout << a.at(i) << ' '; 
-   }
-   cout << endl;
-}
-
 void createGroups(int size) {
     random_shuffle(students.begin(),students.end());
     int num=students.size()/size;
-    int remain=students.size()-num*size;
+    int remain=students.size()%size;
     cout<<"groups:"<<endl;
     int index=0;
     for(int i=1;i<=size;i++){
